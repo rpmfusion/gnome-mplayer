@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
-Version:        0.6.3
-Release:        2%{?dist}
+Version:        0.7.0
+Release:        1.1%{?dist}
 Summary:        A simple MPlayer GUI
 
 Group:          Applications/Multimedia
@@ -95,6 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Aug 17 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.7.0-1
+- Updated to 0.7.0
+
 * Wed Jul 30 2008 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info - 0.6.3-2
 - rebuild for buildsys cflags issue
 
