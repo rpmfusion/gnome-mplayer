@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
 Version:        0.7.0
-Release:        1.1%{?dist}
+Release:        2.1%{?dist}
 Summary:        A simple MPlayer GUI
 
 Group:          Applications/Multimedia
@@ -9,6 +9,7 @@ URL:            http://code.google.com/p/gnome-mplayer/
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+BuildRequires:  alsa-lib-devel
 BuildRequires:  dbus-glib-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  GConf2-devel
@@ -95,7 +96,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sun Aug 17 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.7.0-1
+* Sat Sep  6 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.7.0-2.1
+- Added alsa-lib-devel to BuildRequires (livna bug #2084)
+
+* Sun Aug 17 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.7.0-1.1
 - Updated to 0.7.0
 
 * Wed Jul 30 2008 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info - 0.6.3-2
