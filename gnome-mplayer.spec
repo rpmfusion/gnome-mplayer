@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
-Version:        0.7.0
-Release:        2.1%{?dist}
+Version:        0.8.0
+Release:        1.1%{?dist}
 Summary:        A simple MPlayer GUI
 
 Group:          Applications/Multimedia
@@ -96,6 +96,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Sep 29 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.8.0-1.1
+- Updated to 0.8.0
+
 * Sat Sep  6 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.7.0-2.1
 - Added alsa-lib-devel to BuildRequires (livna bug #2084)
 
