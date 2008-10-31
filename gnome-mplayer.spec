@@ -1,12 +1,13 @@
 Name:           gnome-mplayer
-Version:        0.8.0
-Release:        1.1%{?dist}
+Version:        0.9.0
+Release:        1%{?dist}
 Summary:        A simple MPlayer GUI
 
 Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://code.google.com/p/gnome-mplayer/
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
+Patch0:         gnome-mplayer-translation.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -15,7 +16,9 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  GConf2-devel
 BuildRequires:  gettext
 BuildRequires:  gtk2-devel
+BuildRequires:  libnotify-devel
 
+Requires:       gvfs-fuse
 Requires:       mencoder
 Requires:       mplayer
 
@@ -32,6 +35,7 @@ multiple instances of GNOME MPlayer from a single command.
 
 %prep
 %setup -q
+%patch0 -p0 -b .translation
 
 
 %build
@@ -96,6 +100,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Oct 31 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.0-1
+- Updated to 0.9.0
+- Added libnotify-devel to BuildRequires
+- Added gvfs-fuse to Requires
+
 * Mon Sep 29 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.8.0-1.1
 - Updated to 0.8.0
 
