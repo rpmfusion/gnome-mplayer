@@ -39,7 +39,11 @@ multiple instances of GNOME MPlayer from a single command.
 
 
 %build
-%configure
+%configure \
+%if 0%{?fedora} < 9
+--without-gio
+%endif
+
 make %{?_smp_mflags}
 
 
