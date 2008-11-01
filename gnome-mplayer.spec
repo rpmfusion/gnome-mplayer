@@ -35,11 +35,15 @@ multiple instances of GNOME MPlayer from a single command.
 
 %prep
 %setup -q
-%patch0 -p0 -b .translation
+%patch0 -p1 -b .translation
 
 
 %build
-%configure
+%configure \
+%if 0%{?fedora} < 9
+--without-gio
+%endif
+
 make %{?_smp_mflags}
 
 
