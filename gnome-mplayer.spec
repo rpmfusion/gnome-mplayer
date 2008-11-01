@@ -35,7 +35,7 @@ multiple instances of GNOME MPlayer from a single command.
 
 %prep
 %setup -q
-%patch0 -p0 -b .translation
+%patch0 -p1 -b .translation
 
 
 %build

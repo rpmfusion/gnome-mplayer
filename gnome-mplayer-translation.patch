@@ -1,111 +1,106 @@
-Index: po/pl.po
-===================================================================
---- po/pl.po	(wersja 915)
-+++ po/pl.po	(wersja 916)
-@@ -9,7 +9,7 @@
+--- rpmfusion/free/gnome-mplayer/F-9/gnome-mplayer-0.9.0/po/pl.po.translation 
++++ gnome-mplayer/po/pl.po 
+@@ -8,8 +8,8 @@
+ msgstr ""
  "Project-Id-Version: pl\n"
  "Report-Msgid-Bugs-To: \n"
- "POT-Creation-Date: 2008-10-17 08:32-0600\n"
+-"POT-Creation-Date: 2008-10-30 12:55-0600\n"
 -"PO-Revision-Date: 2008-09-24 11:42+0200\n"
++"POT-Creation-Date: 2008-11-01 15:43+0100\n"
 +"PO-Revision-Date: 2008-10-31 16:50+0100\n"
  "Last-Translator: Julian Sikorski <belegdol@gmail.com>\n"
  "Language-Team: Polish <kde-i18n-doc@lists.kde.org>\n"
  "MIME-Version: 1.0\n"
 @@ -264,7 +264,7 @@
- #: src/gui.c:554
+ #: src/gui.c:590
  #, c-format
  msgid "Idle"
 -msgstr ""
 +msgstr "Bezczynny"
  
- #: src/gui.c:851 src/gui.c:861 src/gui.c:1672 src/gui.c:1700 src/thread.c:380
+ #: src/gui.c:890 src/gui.c:900 src/gui.c:1712 src/gui.c:1740 src/thread.c:384
  #, c-format
 @@ -475,12 +475,11 @@
  
- #: src/gui.c:3476
+ #: src/gui.c:3514
  msgid "Interface"
 -msgstr ""
 +msgstr "Interfejs"
  
- #: src/gui.c:3478
+ #: src/gui.c:3516
 -#, fuzzy
  msgid "MPlayer"
 -msgstr "Odtwarzacz"
 +msgstr "MPlayer"
  
- #: src/gui.c:3480
+ #: src/gui.c:3518
  msgid "Plugin"
-@@ -633,9 +632,8 @@
+@@ -634,9 +633,8 @@
  msgstr "Kodowanie czcionki napisów:"
  
- #: src/gui.c:3910
+ #: src/gui.c:3950
 -#, fuzzy
  msgid "<span weight=\"bold\">Application Preferences</span>"
 -msgstr "<span weight=\"bold\">Szczegóły dźwięku</span>"
 +msgstr "<span weight=\"bold\">Preferencje aplikacji</span>"
  
- #: src/gui.c:3917
+ #: src/gui.c:3957
  msgid "Start with playlist visible"
-@@ -643,11 +641,11 @@
+@@ -644,11 +642,11 @@
  
- #: src/gui.c:3928
+ #: src/gui.c:3968
  msgid "Show notification popup"
 -msgstr ""
 +msgstr "Pokaż wyskakujące powiadomienia"
  
- #: src/gui.c:3935
+ #: src/gui.c:3975
  msgid "Show status icon"
 -msgstr ""
 +msgstr "Pokaż ikonę stanu"
  
- #: src/gui.c:3942
+ #: src/gui.c:3982
  msgid "Start with playlist below media window"
-@@ -658,9 +656,8 @@
+@@ -659,9 +657,8 @@
  msgstr "Pozwól na tylko jedną instancję Gnome MPlayera"
  
- #: src/gui.c:3960
+ #: src/gui.c:4000
 -#, fuzzy
  msgid "When opening in single instance mode, replace existing file"
 -msgstr "Ustaw tryb jednej instancji w trybie zastąp i odtwarzaj"
 +msgstr "Podczas otwierania w trybie jednej instancji zastąp istniejący plik"
  
- #: src/gui.c:3968
+ #: src/gui.c:4008
  msgid "Remember Window Location"
-@@ -687,9 +684,8 @@
+@@ -688,9 +685,8 @@
  "do terminala lub do ~/.xsession-errors"
  
- #: src/gui.c:3997
+ #: src/gui.c:4037
 -#, fuzzy
  msgid "<span weight=\"bold\">Advanced Settings for MPlayer</span>"
 -msgstr "<span weight=\"bold\">Ustawienia zaawansowane</span>"
 +msgstr "<span weight=\"bold\">Zaawansowane ustawienia MPlayera</span>"
  
- #: src/gui.c:4004
+ #: src/gui.c:4044
  msgid "Mplayer Software Volume Control Enabled"
-@@ -758,9 +754,8 @@
+@@ -759,9 +755,8 @@
  msgstr "Pełny e_kran"
  
- #: src/gui.c:4385
+ #: src/gui.c:4425
 -#, fuzzy
  msgid "_Copy Location"
 -msgstr "Otwórz lokalizację"
 +msgstr "S_kopiuj lokalizację"
  
  #. File Menu
- #: src/gui.c:4455
-@@ -910,9 +905,8 @@
+ #: src/gui.c:4495
+@@ -911,9 +906,8 @@
  msgstr "Elementy _sterujące"
  
- #: src/gui.c:4682
+ #: src/gui.c:4722
 -#, fuzzy
  msgid "Advanced _Options"
 -msgstr "Opcje _zaawansowane..."
 +msgstr "Opcje _zaawansowane"
  
  #. Help Menu
- #: src/gui.c:4727
-@@ -1152,3 +1146,4 @@
- 
- #~ msgid "_Copy URL"
- #~ msgstr "S_kopiuj URL"
-+
+ #: src/gui.c:4767
