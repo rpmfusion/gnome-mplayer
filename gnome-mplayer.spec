@@ -1,5 +1,5 @@
 Name:           gnome-mplayer
-Version:        0.9.0
+Version:        0.9.1
 Release:        1%{?dist}
 Summary:        A simple MPlayer GUI
 
@@ -7,7 +7,6 @@ Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://code.google.com/p/gnome-mplayer/
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
-Patch0:         gnome-mplayer-translation.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -35,15 +34,10 @@ multiple instances of GNOME MPlayer from a single command.
 
 %prep
 %setup -q
-%patch0 -p1 -b .translation
 
 
 %build
-%configure \
-%if 0%{?fedora} < 9
---without-gio
-%endif
-
+%configure
 make %{?_smp_mflags}
 
 
@@ -104,6 +98,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Nov  2 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.1-1
+- Updated to 0.9.1
+
 * Fri Oct 31 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.0-1
 - Updated to 0.9.0
 - Added libnotify-devel to BuildRequires
