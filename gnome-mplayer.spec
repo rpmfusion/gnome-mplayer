@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
 Version:        0.9.1
-Release:        1%{?dist}
+Release:        1%{?dist}.1
 Summary:        A simple MPlayer GUI
 
 Group:          Applications/Multimedia
@@ -17,7 +17,6 @@ BuildRequires:  gettext
 BuildRequires:  gtk2-devel
 BuildRequires:  libnotify-devel
 
-Requires:       gvfs-fuse
 Requires:       mencoder
 Requires:       mplayer
 
@@ -98,6 +97,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 11 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.1-1.fc8.1
+- There is no gvfs in Fedora 8
+
 * Sun Nov  2 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.1-1
 - Updated to 0.9.1
 
