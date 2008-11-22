@@ -1,5 +1,5 @@
 Name:           gnome-mplayer
-Version:        0.9.1
+Version:        0.9.2
 Release:        1%{?dist}
 Summary:        A simple MPlayer GUI
 
@@ -15,6 +15,9 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  GConf2-devel
 BuildRequires:  gettext
 BuildRequires:  gtk2-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  libgpod-devel
+BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
 
 Requires:       gvfs-fuse
@@ -24,6 +27,8 @@ Requires:       mplayer
 Requires(pre):  GConf2
 Requires(post): GConf2
 Requires(preun): GConf2
+
+Provides:       gnome-mplayer-core-functionality = %{version}
 
 %description
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
@@ -98,6 +103,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 22 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.2-1
+- Updated to 0.9.2
+- Added libcurl-devel, libgpod-devel and libmusicbrainz3-devel to BuildRequires
+- Provide gnome-mplayer-core-functionality
+
 * Sun Nov  2 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.1-1
 - Updated to 0.9.1
 
