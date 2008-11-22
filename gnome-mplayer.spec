@@ -15,7 +15,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  GConf2-devel
 BuildRequires:  gettext
 BuildRequires:  gtk2-devel
-BuildRequires:  libcurl-devel
+BuildRequires:  curl-devel
 BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
