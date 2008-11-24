@@ -1,7 +1,7 @@
 Name:           gnome-mplayer
 Version:        0.9.2
-Release:        1%{?dist}
-Summary:        A simple MPlayer GUI
+Release:        2%{?dist}
+Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
 License:        GPLv2+
@@ -15,41 +15,89 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  GConf2-devel
 BuildRequires:  gettext
 BuildRequires:  gtk2-devel
-BuildRequires:  curl-devel
+BuildRequires:  libcurl-devel
 BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
 
 Requires:       gvfs-fuse
 Requires:       mencoder
-Requires:       mplayer
+Requires:       %{name}-common = %{version}
 
-Requires(pre):  GConf2
-Requires(post): GConf2
-Requires(preun): GConf2
-
-Provides:       gnome-mplayer-core-functionality = %{version}
+Provides:       %{name}-binary = %{version}
 
 %description
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
 player and provide a simple and clean interface to MPlayer. GNOME MPlayer has
 a rich API that is exposed via DBus. Using DBus you can control a single or
 multiple instances of GNOME MPlayer from a single command.
+This package provides a full-featured binary.
+
+%package common
+Summary:        An MPlayer GUI, common files
+Group:          Applications/Multimedia
+Requires:       mplayer
+
+Requires(pre):  GConf2
+Requires(post): GConf2
+Requires(preun): GConf2
+
+%description common
+GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
+player and provide a simple and clean interface to MPlayer. GNOME MPlayer has
+a rich API that is exposed via DBus. Using DBus you can control a single or
+multiple instances of GNOME MPlayer from a single command.
+This package provides the common files.
+
+%package minimal
+Summary:        An MPlayer GUI, a minimal version
+Group:          Applications/Multimedia
+Requires:       %{name}-common = %{version}
+Provides:       %{name}-binary = %{version}
+
+%description minimal
+GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
+player and provide a simple and clean interface to MPlayer. GNOME MPlayer has
+a rich API that is exposed via DBus. Using DBus you can control a single or
+multiple instances of GNOME MPlayer from a single command.
+This package provides a version with reduced requirements, targeted at users
+who want browser plugin functionality only.
 
 
 %prep
-%setup -q
+%setup -qcT
+tar -xzf %{SOURCE0}
+mv %{name}-%{version} generic
+tar -xzf %{SOURCE0}
+mv %{name}-%{version} minimal
 
 
 %build
+pushd generic
 %configure
 make %{?_smp_mflags}
+popd
+
+pushd minimal
+%configure --program-suffix=-minimal --without-gio --without-libnotify \
+    --without-libgpod --without-libmusicbrainz3
+make %{?_smp_mflags}
+popd
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
+pushd generic
 export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 make install DESTDIR=$RPM_BUILD_ROOT
+popd
+
+pushd minimal
+export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
+make install DESTDIR=$RPM_BUILD_ROOT
+popd
+
 desktop-file-install --vendor=rpmfusion \
        --delete-original --dir $RPM_BUILD_ROOT%{_datadir}/applications \
        $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
@@ -59,7 +107,7 @@ desktop-file-install --vendor=rpmfusion \
 rm -rf $RPM_BUILD_ROOT%{_docdir}/gnome-mplayer
 
 
-%pre
+%pre common
 if [ "$1" -gt 1 ]; then
     export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
     gconftool-2 --makefile-uninstall-rule \
@@ -72,12 +120,19 @@ fi
 
 %post
 update-desktop-database &> /dev/null || :
+
+
+%postun
+update-desktop-database &> /dev/null || :
+
+
+%post common
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-install-rule \
   %{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas > /dev/null || :
 
 
-%preun
+%preun common
 if [ "$1" -eq 0 ]; then
     export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
     gconftool-2 --makefile-uninstall-rule \
@@ -85,24 +140,31 @@ if [ "$1" -eq 0 ]; then
 fi
 
 
-%postun
-update-desktop-database &> /dev/null || :
-
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 
-%files -f %{name}.lang
+%files
 %defattr(-,root,root,-)
-%doc COPYING ChangeLog README DOCS/tech/*
-%{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas
 %{_bindir}/gnome-mplayer
 %{_datadir}/applications/rpmfusion-gnome-mplayer.desktop
+
+%files common -f %{name}.lang
+%defattr(-,root,root,-)
+%doc generic/COPYING generic/ChangeLog generic/README generic/DOCS/tech/*
+%{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas
 %{_datadir}/pixmaps/gnome-mplayer.png
+
+%files minimal
+%defattr(-,root,root,-)
+%{_bindir}/gnome-mplayer-minimal
 
 
 %changelog
+* Mon Nov 24 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.2-2
+- Refactored the spec to allow building both minimal and full-featured versions
+- s/gnome-mplayer-core-functionality/gnome-mplayer-binary
+
 * Sat Nov 22 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.2-1
 - Updated to 0.9.2
 - Added libcurl-devel, libgpod-devel and libmusicbrainz3-devel to BuildRequires
