@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
 Version:        0.9.2
-Release:        2%{?dist}
+Release:        2%{?dist}.1
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
@@ -20,7 +20,6 @@ BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
 
-Requires:       gvfs-fuse
 Requires:       mencoder
 Requires:       %{name}-common = %{version}
 
@@ -161,6 +160,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Nov 24 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.2-2.fc8.1
+- Removed gvfs-fuse requirement
+
 * Mon Nov 24 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.2-2
 - Refactored the spec to allow building both minimal and full-featured versions
 - s/gnome-mplayer-core-functionality/gnome-mplayer-binary
