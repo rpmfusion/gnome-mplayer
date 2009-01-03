@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
-Version:        0.9.2
-Release:        2%{?dist}
+Version:        0.9.3
+Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
@@ -161,6 +161,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jan  3 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.3-1
+- Updated to 0.9.3
+
 * Mon Nov 24 2008 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.2-2
 - Refactored the spec to allow building both minimal and full-featured versions
 - s/gnome-mplayer-core-functionality/gnome-mplayer-binary
