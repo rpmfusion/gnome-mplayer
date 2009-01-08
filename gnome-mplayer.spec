@@ -1,12 +1,13 @@
 Name:           gnome-mplayer
 Version:        0.9.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://code.google.com/p/gnome-mplayer/
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
+Patch0:         gnome-mplayer-0.9.3-playlist.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -22,9 +23,9 @@ BuildRequires:  libnotify-devel
 
 Requires:       gvfs-fuse
 Requires:       mencoder
-Requires:       %{name}-common = %{version}
+Requires:       %{name}-common = %{version}-%{release}
 
-Provides:       %{name}-binary = %{version}
+Provides:       %{name}-binary = %{version}-%{release}
 
 %description
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
@@ -52,8 +53,8 @@ This package provides the common files.
 %package minimal
 Summary:        An MPlayer GUI, a minimal version
 Group:          Applications/Multimedia
-Requires:       %{name}-common = %{version}
-Provides:       %{name}-binary = %{version}
+Requires:       %{name}-common = %{version}-%{release}
+Provides:       %{name}-binary = %{version}-%{release}
 
 %description minimal
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
@@ -70,6 +71,14 @@ tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
+
+pushd generic
+%patch0 -p0 -b .playlist
+popd
+
+pushd minimal
+%patch0 -p0 -b .playlist
+popd
 
 
 %build
@@ -161,6 +170,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jan  8 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.3-2
+- Added patch fixing rpmfusion bug #238 from SVN
+- Made the dependencies between packages stricter (%%{version} → %%{version}-%%{release})
+
 * Sat Jan  3 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.3-1
 - Updated to 0.9.3
 
