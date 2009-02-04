@@ -1,13 +1,12 @@
 Name:           gnome-mplayer
-Version:        0.9.3
-Release:        2%{?dist}
+Version:        0.9.4
+Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
 License:        GPLv2+
-URL:            http://code.google.com/p/gnome-mplayer/
+URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
-Patch0:         gnome-mplayer-0.9.3-playlist.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -71,14 +70,6 @@ tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
-
-pushd generic
-%patch0 -p0 -b .playlist
-popd
-
-pushd minimal
-%patch0 -p0 -b .playlist
-popd
 
 
 %build
@@ -170,6 +161,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb  4 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.4-1
+- Updated to 0.9.4
+- Dropped the upsteamed patch
+- Updated the URL
+
 * Thu Jan  8 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.3-2
 - Added patch fixing rpmfusion bug #238 from SVN
 - Made the dependencies between packages stricter (%%{version} → %%{version}-%%{release})
