@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
-Version:        0.9.4
-Release:        2%{?dist}
+Version:        0.9.5
+Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
@@ -19,6 +19,7 @@ BuildRequires:  libcurl-devel
 BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
+BuildRequires:  nautilus-devel
 
 Requires:       gvfs-fuse
 Requires:       mencoder
@@ -32,6 +33,7 @@ player and provide a simple and clean interface to MPlayer. GNOME MPlayer has
 a rich API that is exposed via DBus. Using DBus you can control a single or
 multiple instances of GNOME MPlayer from a single command.
 This package provides a full-featured binary.
+
 
 %package common
 Summary:        An MPlayer GUI, common files
@@ -49,6 +51,7 @@ a rich API that is exposed via DBus. Using DBus you can control a single or
 multiple instances of GNOME MPlayer from a single command.
 This package provides the common files.
 
+
 %package minimal
 Summary:        An MPlayer GUI, a minimal version
 Group:          Applications/Multimedia
@@ -64,6 +67,21 @@ This package provides a version with reduced requirements, targeted at users
 who want browser plugin functionality only.
 
 
+%package nautilus
+Summary:        An MPlayer GUI, nautilus extension
+Group:          Applications/Multimedia
+Requires:       %{name} = %{version}-%{release}
+Requires:       nautilus-extensions
+
+%description nautilus
+GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
+player and provide a simple and clean interface to MPlayer. GNOME MPlayer has
+a rich API that is exposed via DBus. Using DBus you can control a single or
+multiple instances of GNOME MPlayer from a single command.
+This package provides a nautilus extension, which shows properties of audio and
+video files in the properties dialogue.
+
+
 %prep
 %setup -qcT
 tar -xzf %{SOURCE0}
@@ -74,13 +92,13 @@ mv %{name}-%{version} minimal
 
 %build
 pushd generic
-%configure
+%configure --disable-static
 make %{?_smp_mflags}
 popd
 
 pushd minimal
 %configure --program-suffix=-minimal --without-gio --without-libnotify \
-    --without-libgpod --without-libmusicbrainz3
+    --without-libgpod --without-libmusicbrainz3 --disable-nautilus
 make %{?_smp_mflags}
 popd
 
@@ -105,6 +123,9 @@ desktop-file-install --vendor=rpmfusion \
 
 #remove intrusive docs
 rm -rf $RPM_BUILD_ROOT%{_docdir}/gnome-mplayer
+
+#kill the libtool archives
+find $RPM_BUILD_ROOT -name *.la -exec rm -f {} \;
 
 
 %pre common
@@ -149,18 +170,32 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/gnome-mplayer
 %{_datadir}/applications/rpmfusion-gnome-mplayer.desktop
 
+
 %files common -f %{name}.lang
 %defattr(-,root,root,-)
-%doc generic/COPYING generic/ChangeLog generic/README generic/DOCS/tech/*
+%doc generic/COPYING generic/ChangeLog generic/README generic/DOCS/keyboard_shortcuts.txt generic/DOCS/tech/*
 %{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas
 %{_datadir}/pixmaps/gnome-mplayer.png
+
 
 %files minimal
 %defattr(-,root,root,-)
 %{_bindir}/gnome-mplayer-minimal
 
 
+%files nautilus
+%defattr(-,root,root,-)
+%{_libdir}/nautilus/extensions-2.0/libgnome-mplayer-properties-page.so*
+
+
 %changelog
+* Fri Mar 13 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.5-1
+- Updated to 0.9.5
+- Added nautilus-devel to BuildRequires
+- Packaged nautilus extension separately
+- Adjusted whitespaces
+- Added keyboard shortcuts to documentation
+
 * Sun Mar 01 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.4-2
 - Rebuilt for new libgpod
 
