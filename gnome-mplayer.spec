@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
 Version:        0.9.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
@@ -189,6 +189,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Mar 29 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.9.5-2
+- rebuild for new F11 features
+
 * Fri Mar 13 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.5-1
 - Updated to 0.9.5
 - Added nautilus-devel to BuildRequires
