@@ -1,12 +1,13 @@
 Name:           gnome-mplayer
 Version:        0.9.5
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
+Patch0:         gnome-mplayer-0.9.5-nautilus-translation.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -88,6 +89,12 @@ tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
+pushd generic
+%patch0 -p0 -b .nautilus
+popd
+pushd minimal
+%patch0 -p0 -b .nautilus
+popd
 
 
 %build
@@ -189,6 +196,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Apr 21 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.5-3
+- Added patch fixing breaking nautilus translation from SVN
+
+* Sun Mar 29 2009 Thorsten Leemhuis <fedora [AT] leemhuis [DOT] info> - 0.9.5-2
+- rebuild for new F11 features
+
 * Fri Mar 13 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.5-1
 - Updated to 0.9.5
 - Added nautilus-devel to BuildRequires
