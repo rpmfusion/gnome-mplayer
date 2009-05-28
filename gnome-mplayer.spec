@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
 Version:        0.9.5
-Release:        3%{?dist}
+Release:        3%{?dist}.1
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
@@ -196,6 +196,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu May 28 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.5-3.fc10.1
+- Rebuilt for libgpod-0.7.0
+
 * Tue Apr 21 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.5-3
 - Added patch fixing breaking nautilus translation from SVN
 
