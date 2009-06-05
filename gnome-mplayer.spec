@@ -1,13 +1,15 @@
 Name:           gnome-mplayer
-Version:        0.9.5
-Release:        3%{?dist}.1
+Version:        0.9.6
+Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
-Patch0:         gnome-mplayer-0.9.5-nautilus-translation.patch
+%if 0%{?fedora} >= 11
+Patch0:         gnome-mplayer-flatvolume.patch
+%endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -89,12 +91,14 @@ tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
+%if 0%{?fedora} >= 11
 pushd generic
-%patch0 -p0 -b .nautilus
+%patch0 -p0 -b .flatvolume
 popd
 pushd minimal
-%patch0 -p0 -b .nautilus
+%patch0 -p0 -b .flatvolume
 popd
+%endif
 
 
 %build
@@ -196,8 +200,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Thu May 28 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.5-3.fc10.1
-- Rebuilt for libgpod-0.7.0
+* Sun Jun 05 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.6-1
+- Updated to 0.9.6
+- Dropped upstreamed patches
+- Enabled flat volumes by default in Fedora 11 and above
 
 * Tue Apr 21 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.5-3
 - Added patch fixing breaking nautilus translation from SVN
