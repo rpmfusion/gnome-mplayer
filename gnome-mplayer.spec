@@ -11,6 +11,7 @@ Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar
 Patch0:         gnome-mplayer-flatvolume.patch
 Patch1:         gnome-mplayer-inhibit.patch
 %endif
+Patch1:         gnome-mplayer-inhibit.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
