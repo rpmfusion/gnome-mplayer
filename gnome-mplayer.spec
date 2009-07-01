@@ -9,8 +9,8 @@ URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
 %if 0%{?fedora} >= 11
 Patch0:         gnome-mplayer-flatvolume.patch
-%endif
 Patch1:         gnome-mplayer-inhibit.patch
+%endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -95,11 +95,11 @@ mv %{name}-%{version} minimal
 %if 0%{?fedora} >= 11
 pushd generic
 %patch0 -p0 -b .flatvolume
-%patch2 -p0 -b .inhibit
+%patch1 -p0 -b .inhibit
 popd
 pushd minimal
 %patch0 -p0 -b .flatvolume
-%patch2 -p0 -b .inhibit
+%patch1 -p0 -b .inhibit
 popd
 %endif
 
