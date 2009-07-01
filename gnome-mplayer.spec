@@ -1,6 +1,6 @@
 Name:           gnome-mplayer
 Version:        0.9.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
@@ -10,6 +10,7 @@ Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar
 %if 0%{?fedora} >= 11
 Patch0:         gnome-mplayer-flatvolume.patch
 %endif
+Patch1:         gnome-mplayer-inhibit.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -94,9 +95,11 @@ mv %{name}-%{version} minimal
 %if 0%{?fedora} >= 11
 pushd generic
 %patch0 -p0 -b .flatvolume
+%patch2 -p0 -b .inhibit
 popd
 pushd minimal
 %patch0 -p0 -b .flatvolume
+%patch2 -p0 -b .inhibit
 popd
 %endif
 
@@ -200,6 +203,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jul 01 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.6-2
+- Fixed screensaver inhibition
+
 * Sun Jun 05 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.6-1
 - Updated to 0.9.6
 - Dropped upstreamed patches
