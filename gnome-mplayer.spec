@@ -1,17 +1,12 @@
 Name:           gnome-mplayer
-Version:        0.9.6
-Release:        2%{?dist}
+Version:        0.9.7
+Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
-%if 0%{?fedora} >= 11
-Patch0:         gnome-mplayer-flatvolume.patch
-Patch1:         gnome-mplayer-inhibit.patch
-%endif
-Patch1:         gnome-mplayer-inhibit.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -93,21 +88,11 @@ tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
-%if 0%{?fedora} >= 11
-pushd generic
-%patch0 -p0 -b .flatvolume
-%patch1 -p0 -b .inhibit
-popd
-pushd minimal
-%patch0 -p0 -b .flatvolume
-%patch1 -p0 -b .inhibit
-popd
-%endif
 
 
 %build
 pushd generic
-%configure --disable-static
+%configure
 make %{?_smp_mflags}
 popd
 
@@ -166,6 +151,18 @@ update-desktop-database &> /dev/null || :
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-install-rule \
   %{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas > /dev/null || :
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+
+
+%postun common
+if [ $1 -eq 0 ] ; then
+    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+fi
+
+
+%posttrans common
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %preun common
@@ -190,7 +187,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc generic/COPYING generic/ChangeLog generic/README generic/DOCS/keyboard_shortcuts.txt generic/DOCS/tech/*
 %{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas
-%{_datadir}/pixmaps/gnome-mplayer.png
+%{_datadir}/icons/hicolor/*/apps/gnome-mplayer.*
+%{_mandir}/man1/gnome-mplayer.1*
 
 
 %files minimal
@@ -204,6 +202,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jul 21 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.7-1
+- Updated to 0.9.7
+- Dropped upstreamed patches
+- Added icon cache scriptlets
+
 * Wed Jul 01 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.6-2
 - Fixed screensaver inhibition
 
