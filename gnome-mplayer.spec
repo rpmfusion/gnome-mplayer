@@ -14,12 +14,14 @@ BuildRequires:  dbus-glib-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  GConf2-devel
 BuildRequires:  gettext
+BuildRequires:  gnome-power-manager
 BuildRequires:  gtk2-devel
 BuildRequires:  libcurl-devel
 BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
 BuildRequires:  nautilus-devel
+BuildRequires:  pulseaudio
 
 Requires:       gvfs-fuse
 Requires:       mencoder
@@ -202,10 +204,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Fri Jul 21 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.7-1
+* Fri Aug 21 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.7-1
 - Updated to 0.9.7
 - Dropped upstreamed patches
 - Added icon cache scriptlets
+- Added pulseaudio and gnome-power-manager to BuildRequires
 
 * Wed Jul 01 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.6-2
 - Fixed screensaver inhibition
