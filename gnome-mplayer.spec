@@ -1,5 +1,5 @@
 Name:           gnome-mplayer
-Version:        0.9.7
+Version:        0.9.8
 Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
@@ -204,6 +204,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Sep 19 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.8-1
+- Updated to 0.9.8
+
 * Fri Aug 21 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.7-1
 - Updated to 0.9.7
 - Dropped upstreamed patches
