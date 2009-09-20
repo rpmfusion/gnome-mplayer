@@ -7,6 +7,7 @@ Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
+Patch0:         gnome-mplayer-parse.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -90,6 +91,9 @@ tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
+pushd minimal
+%patch0 -p0 -b .parse
+popd
 
 
 %build
