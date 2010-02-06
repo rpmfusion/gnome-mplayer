@@ -20,9 +20,11 @@ BuildRequires:  libcurl-devel
 BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
+BuildRequires:  libXScrnSaver-devel
 BuildRequires:  nautilus-devel
 BuildRequires:  pulseaudio
 
+Requires:       control-center-filesystem
 Requires:       gvfs-fuse
 Requires:       mencoder
 Requires:       %{name}-common = %{version}-%{release}
@@ -183,6 +185,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_bindir}/gnome-mplayer
 %{_datadir}/applications/rpmfusion-gnome-mplayer.desktop
+%{_datadir}/gnome-control-center/default-apps/gnome-mplayer.xml
 
 
 %files common -f %{name}.lang
@@ -204,9 +207,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sat Feb 09 2010 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.9-1
+* Sat Feb 06 2010 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.9-1
 - Updated to 0.9.9
 - Dropped included patch
+- Added libXScrnSaver-devel to BuildRequires
 
 * Sat Sep 19 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.8-1
 - Updated to 0.9.8
