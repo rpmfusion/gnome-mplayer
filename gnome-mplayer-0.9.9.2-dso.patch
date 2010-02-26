@@ -1,0 +1,44 @@
+diff -up gnome-mplayer-0.9.9.2/generic/src/Makefile.am.dso gnome-mplayer-0.9.9.2/generic/src/Makefile.am
+--- gnome-mplayer-0.9.9.2/generic/src/Makefile.am.dso	2009-11-29 21:44:09.000000000 +0100
++++ gnome-mplayer-0.9.9.2/generic/src/Makefile.am	2010-02-26 18:29:28.000000000 +0100
+@@ -65,6 +65,7 @@ gnome_mplayer_LDFLAGS = 
+ gnome_mplayer_LDADD = \
+     libgmtk/libgmtk.a \
+     libgmlib/libgmlib.a \
++    -lm \
+     $(X11_LIBS) \
+     $(GTK_LIBS) \
+     $(GIO_LIBS) \
+diff -up gnome-mplayer-0.9.9.2/generic/src/Makefile.in.dso gnome-mplayer-0.9.9.2/generic/src/Makefile.in
+--- gnome-mplayer-0.9.9.2/generic/src/Makefile.in.dso	2010-02-22 22:46:25.000000000 +0100
++++ gnome-mplayer-0.9.9.2/generic/src/Makefile.in	2010-02-26 18:29:28.000000000 +0100
+@@ -336,6 +336,7 @@ gnome_mplayer_SOURCES = \
+ 
+ gnome_mplayer_LDFLAGS = 
+ gnome_mplayer_LDADD = \
++    -lm \
+     libgmtk/libgmtk.a \
+     libgmlib/libgmlib.a \
+     $(X11_LIBS) \
+diff -up gnome-mplayer-0.9.9.2/minimal/src/Makefile.am.dso gnome-mplayer-0.9.9.2/minimal/src/Makefile.am
+--- gnome-mplayer-0.9.9.2/minimal/src/Makefile.am.dso	2009-11-29 21:44:09.000000000 +0100
++++ gnome-mplayer-0.9.9.2/minimal/src/Makefile.am	2010-02-26 18:29:28.000000000 +0100
+@@ -65,6 +65,7 @@ gnome_mplayer_LDFLAGS = 
+ gnome_mplayer_LDADD = \
+     libgmtk/libgmtk.a \
+     libgmlib/libgmlib.a \
++    -lm \
+     $(X11_LIBS) \
+     $(GTK_LIBS) \
+     $(GIO_LIBS) \
+diff -up gnome-mplayer-0.9.9.2/minimal/src/Makefile.in.dso gnome-mplayer-0.9.9.2/minimal/src/Makefile.in
+--- gnome-mplayer-0.9.9.2/minimal/src/Makefile.in.dso	2010-02-22 22:46:25.000000000 +0100
++++ gnome-mplayer-0.9.9.2/minimal/src/Makefile.in	2010-02-26 18:29:28.000000000 +0100
+@@ -336,6 +336,7 @@ gnome_mplayer_SOURCES = \
+ 
+ gnome_mplayer_LDFLAGS = 
+ gnome_mplayer_LDADD = \
++    -lm \
+     libgmtk/libgmtk.a \
+     libgmlib/libgmlib.a \
+     $(X11_LIBS) \

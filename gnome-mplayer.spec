@@ -7,6 +7,7 @@ Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
+Patch0:         gnome-mplayer-0.9.9.2-dso.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -92,6 +93,7 @@ tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
+%patch0 -p1 -b .dso
 
 
 %build
@@ -209,6 +211,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Thu Feb 25 2010 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.9.2-1
 - Updated to 0.9.9.2
+- Added bits necessary for https://fedoraproject.org/wiki/Features/ChangeInImplicitDSOLinking
 
 * Sat Feb 06 2010 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.9-1
 - Updated to 0.9.9
