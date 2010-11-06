@@ -1,5 +1,5 @@
 Name:           gnome-mplayer
-Version:        0.9.9.2
+Version:        1.0.0
 Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
@@ -207,8 +207,13 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 06 2010 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.0-1
+- Updated to 1.0.0
+- Dropped upstreamed patch
+
 * Thu Feb 25 2010 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.9.2-1
 - Updated to 0.9.9.2
+- Added bits necessary for https://fedoraproject.org/wiki/Features/ChangeInImplicitDSOLinking
 
 * Sat Feb 06 2010 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.9-1
 - Updated to 0.9.9
