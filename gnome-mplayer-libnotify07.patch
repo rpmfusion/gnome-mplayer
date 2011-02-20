@@ -1,0 +1,321 @@
+Index: configure
+===================================================================
+--- configure	(wersja 1788)
++++ configure	(wersja 1789)
+@@ -612,6 +612,8 @@
+ GPOD06_LIBS
+ GPOD06_CFLAGS
+ NOTIFY_DEFINES
++LIBNOTIFY_07_LIBS
++LIBNOTIFY_07_CFLAGS
+ NOTIFY_LIBS
+ NOTIFY_CFLAGS
+ ALSA_DEFINES
+@@ -818,6 +820,8 @@
+ ALSA_LIBS
+ NOTIFY_CFLAGS
+ NOTIFY_LIBS
++LIBNOTIFY_07_CFLAGS
++LIBNOTIFY_07_LIBS
+ GPOD06_CFLAGS
+ GPOD06_LIBS
+ GPOD07_CFLAGS
+@@ -1519,6 +1523,10 @@
+   NOTIFY_CFLAGS
+               C compiler flags for NOTIFY, overriding pkg-config
+   NOTIFY_LIBS linker flags for NOTIFY, overriding pkg-config
++  LIBNOTIFY_07_CFLAGS
++              C compiler flags for LIBNOTIFY_07, overriding pkg-config
++  LIBNOTIFY_07_LIBS
++              linker flags for LIBNOTIFY_07, overriding pkg-config
+   GPOD06_CFLAGS
+               C compiler flags for GPOD06, overriding pkg-config
+   GPOD06_LIBS linker flags for GPOD06, overriding pkg-config
+@@ -8321,13 +8329,85 @@
+ $as_echo "#define NOTIFY_ENABLED 1" >>confdefs.h
+ 
+ fi
++	 # Check for libnotify >= 0.7
+ 
++pkg_failed=no
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBNOTIFY_07" >&5
++$as_echo_n "checking for LIBNOTIFY_07... " >&6; }
+ 
++if test -n "$LIBNOTIFY_07_CFLAGS"; then
++    pkg_cv_LIBNOTIFY_07_CFLAGS="$LIBNOTIFY_07_CFLAGS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.7\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "libnotify >= 0.7") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_LIBNOTIFY_07_CFLAGS=`$PKG_CONFIG --cflags "libnotify >= 0.7" 2>/dev/null`
++else
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
++fi
++if test -n "$LIBNOTIFY_07_LIBS"; then
++    pkg_cv_LIBNOTIFY_07_LIBS="$LIBNOTIFY_07_LIBS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libnotify >= 0.7\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "libnotify >= 0.7") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_LIBNOTIFY_07_LIBS=`$PKG_CONFIG --libs "libnotify >= 0.7" 2>/dev/null`
++else
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
++fi
+ 
+ 
++
++if test $pkg_failed = yes; then
++
++if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
++        _pkg_short_errors_supported=yes
++else
++        _pkg_short_errors_supported=no
+ fi
++        if test $_pkg_short_errors_supported = yes; then
++	        LIBNOTIFY_07_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "libnotify >= 0.7" 2>&1`
++        else
++	        LIBNOTIFY_07_PKG_ERRORS=`$PKG_CONFIG --print-errors "libnotify >= 0.7" 2>&1`
++        fi
++	# Put the nasty error message in config.log where it belongs
++	echo "$LIBNOTIFY_07_PKG_ERRORS" >&5
+ 
++	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++                { $as_echo "$as_me:${as_lineno-$LINENO}: Using older libnotify" >&5
++$as_echo "$as_me: Using older libnotify" >&6;}
++elif test $pkg_failed = untried; then
++	{ $as_echo "$as_me:${as_lineno-$LINENO}: Using older libnotify" >&5
++$as_echo "$as_me: Using older libnotify" >&6;}
++else
++	LIBNOTIFY_07_CFLAGS=$pkg_cv_LIBNOTIFY_07_CFLAGS
++	LIBNOTIFY_07_LIBS=$pkg_cv_LIBNOTIFY_07_LIBS
++        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
+ 
++$as_echo "#define NOTIFY0_7_ENABLED 1" >>confdefs.h
++
++fi
++
++
++
++
++fi
++
++
+ # Check whether --with-libgpod was given.
+ if test "${with_libgpod+set}" = set; then :
+   withval=$with_libgpod;
+Index: Makefile.in
+===================================================================
+--- Makefile.in	(wersja 1788)
++++ Makefile.in	(wersja 1789)
+@@ -203,6 +203,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: src/libgmlib/Makefile.in
+===================================================================
+--- src/libgmlib/Makefile.in	(wersja 1788)
++++ src/libgmlib/Makefile.in	(wersja 1789)
+@@ -140,6 +140,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: src/Makefile.in
+===================================================================
+--- src/Makefile.in	(wersja 1788)
++++ src/Makefile.in	(wersja 1789)
+@@ -200,6 +200,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: src/libgmtk/Makefile.in
+===================================================================
+--- src/libgmtk/Makefile.in	(wersja 1788)
++++ src/libgmtk/Makefile.in	(wersja 1789)
+@@ -138,6 +138,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: src/gui.c
+===================================================================
+--- src/gui.c	(wersja 1788)
++++ src/gui.c	(wersja 1789)
+@@ -472,13 +472,21 @@
+ #ifdef NOTIFY_ENABLED
+         if (show_notification && control_id == 0 && !gtk_window_is_active((GtkWindow *) window)) {
+             notify_init("gnome-mplayer");
++#ifdef NOTIFY0_7_ENABLED
+             notification =
+                 notify_notification_new(idle->display_name, idle->media_notification,
++                                        "gnome-mplayer");
++#else
++            notification =
++                notify_notification_new(idle->display_name, idle->media_notification,
+                                         "gnome-mplayer", NULL);
++#endif
+ #ifdef GTK2_12_ENABLED
++#if !NOTIFY0_7_ENABLED			
+             if (show_status_icon)
+                 notify_notification_attach_to_status_icon(notification, status_icon);
+ #endif
++#endif
+             notify_notification_show(notification, NULL);
+             notify_uninit();
+         }
+Index: configure.in
+===================================================================
+--- configure.in	(wersja 1788)
++++ configure.in	(wersja 1789)
+@@ -101,9 +101,11 @@
+         [with_libnotify=check])
+ AS_IF([test "x$with_libnotify" != xno], 
+     [PKG_CHECK_MODULES(NOTIFY,[libnotify],[NOTIFY_DEFINES="-DNOTIFY_ENABLED" AC_DEFINE([NOTIFY_ENABLED],[1],[Define to 1 if you have NOTIFY support])],AC_MSG_WARN([Compiling without libnotify support]))
+-    AC_SUBST(NOTIFY_DEFINES)
+-    AC_SUBST(NOTIFY_CFLAGS)
+-    AC_SUBST(NOTIFY_LIBS)
++	 # Check for libnotify >= 0.7
++	 PKG_CHECK_MODULES(LIBNOTIFY_07, [libnotify >= 0.7], [AC_DEFINE([NOTIFY0_7_ENABLED],[1],[Define to 1 if you have NOTIFY support])],[AC_MSG_NOTICE([Using older libnotify])])
++     AC_SUBST(NOTIFY_DEFINES)
++     AC_SUBST(NOTIFY_CFLAGS)
++     AC_SUBST(NOTIFY_LIBS)
+     ])
+ 
+ AC_ARG_WITH([libgpod],
+Index: config.h.in
+===================================================================
+--- config.h.in	(wersja 1788)
++++ config.h.in	(wersja 1789)
+@@ -88,6 +88,9 @@
+ #undef MUSICBRAINZ_ENABLED
+ 
+ /* Define to 1 if you have NOTIFY support */
++#undef NOTIFY0_7_ENABLED
++
++/* Define to 1 if you have NOTIFY support */
+ #undef NOTIFY_ENABLED
+ 
+ /* Define to 1 if your C compiler doesn't accept -c and -o together. */
+Index: icons/48x48/Makefile.in
+===================================================================
+--- icons/48x48/Makefile.in	(wersja 1788)
++++ icons/48x48/Makefile.in	(wersja 1789)
+@@ -143,6 +143,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: icons/22x22/Makefile.in
+===================================================================
+--- icons/22x22/Makefile.in	(wersja 1788)
++++ icons/22x22/Makefile.in	(wersja 1789)
+@@ -143,6 +143,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: icons/32x32/Makefile.in
+===================================================================
+--- icons/32x32/Makefile.in	(wersja 1788)
++++ icons/32x32/Makefile.in	(wersja 1789)
+@@ -143,6 +143,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: icons/Makefile.in
+===================================================================
+--- icons/Makefile.in	(wersja 1788)
++++ icons/Makefile.in	(wersja 1789)
+@@ -159,6 +159,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: icons/24x24/Makefile.in
+===================================================================
+--- icons/24x24/Makefile.in	(wersja 1788)
++++ icons/24x24/Makefile.in	(wersja 1789)
+@@ -143,6 +143,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: icons/16x16/Makefile.in
+===================================================================
+--- icons/16x16/Makefile.in	(wersja 1788)
++++ icons/16x16/Makefile.in	(wersja 1789)
+@@ -143,6 +143,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
+Index: icons/scalable/Makefile.in
+===================================================================
+--- icons/scalable/Makefile.in	(wersja 1788)
++++ icons/scalable/Makefile.in	(wersja 1789)
+@@ -143,6 +143,8 @@
+ INSTOBJEXT = @INSTOBJEXT@
+ INTLLIBS = @INTLLIBS@
+ LDFLAGS = @LDFLAGS@
++LIBNOTIFY_07_CFLAGS = @LIBNOTIFY_07_CFLAGS@
++LIBNOTIFY_07_LIBS = @LIBNOTIFY_07_LIBS@
+ LIBOBJS = @LIBOBJS@
+ LIBS = @LIBS@
+ LTLIBOBJS = @LTLIBOBJS@
