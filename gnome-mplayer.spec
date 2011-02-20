@@ -1,12 +1,15 @@
+%bcond_without minimal
+
 Name:           gnome-mplayer
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
+Patch0:         gnome-mplayer-vdpau.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -56,6 +59,7 @@ multiple instances of GNOME MPlayer from a single command.
 This package provides the common files.
 
 
+%if %{with minimal}
 %package minimal
 Summary:        An MPlayer GUI, a minimal version
 Group:          Applications/Multimedia
@@ -69,6 +73,7 @@ a rich API that is exposed via DBus. Using DBus you can control a single or
 multiple instances of GNOME MPlayer from a single command.
 This package provides a version with reduced requirements, targeted at users
 who want browser plugin functionality only.
+%endif
 
 
 %package nautilus
@@ -90,8 +95,16 @@ video files in the properties dialogue.
 %setup -qcT
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
+pushd generic
+%patch0 -p0 -b .vdpau
+popd
+%if %{with minimal}
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
+pushd minimal
+%patch0 -p0 -b .vdpau
+popd
+%endif
 
 
 %build
@@ -100,11 +113,13 @@ pushd generic
 make %{?_smp_mflags}
 popd
 
+%if %{with minimal}
 pushd minimal
 %configure --program-suffix=-minimal --without-gio --without-libnotify \
     --without-libgpod --without-libmusicbrainz3 --disable-nautilus
 make %{?_smp_mflags}
 popd
+%endif
 
 
 %install
@@ -115,10 +130,12 @@ export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 make install DESTDIR=$RPM_BUILD_ROOT
 popd
 
+%if %{with minimal}
 pushd minimal
 export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 make install DESTDIR=$RPM_BUILD_ROOT
 popd
+%endif
 
 desktop-file-install --vendor=rpmfusion \
        --delete-original --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -196,9 +213,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/gnome-mplayer.1*
 
 
+%if %{with minimal}
 %files minimal
 %defattr(-,root,root,-)
 %{_bindir}/gnome-mplayer-minimal
+%endif
 
 
 %files nautilus
@@ -207,6 +226,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Feb 20 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.0-2
+- Fixed intrusive error popup for vdpau (RF #1633)
+- Added a conditional for building without the minimal player
+
 * Sat Nov 06 2010 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.0-1
 - Updated to 1.0.0
 - Dropped upstreamed patch
