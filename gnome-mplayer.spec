@@ -25,7 +25,7 @@ BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
 BuildRequires:  libXScrnSaver-devel
 BuildRequires:  nautilus-devel
-BuildRequires:  pulseaudio
+BuildRequires:  pulseaudio-libs-devel
 
 Requires:       control-center-filesystem
 Requires:       gvfs-fuse
@@ -229,6 +229,7 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Mar 04 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.2-1
 - Updated to 1.0.2
 - Dropped included patches
+- Updated BuildRequires to pulseaudio-libs-devel
 
 * Sun Feb 20 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.0-2
 - Fixed intrusive error popup for vdpau (RF #1633)
