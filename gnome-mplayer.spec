@@ -9,7 +9,6 @@ Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
-Patch2:         gnome-mplayer-av.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -95,15 +94,9 @@ video files in the properties dialogue.
 %setup -qcT
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
-pushd generic
-%patch2 -p2 -b .av
-popd
 %if %{with minimal}
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
-pushd minimal
-%patch2 -p2 -b .av
-popd
 %endif
 
 
@@ -234,7 +227,6 @@ rm -rf $RPM_BUILD_ROOT
 - Fixed intrusive error popup for vdpau (RF #1633)
 - Added a conditional for building without the minimal player
 - Added support for libnotify-0.7 from SVN
-- Fixed rawhide build failure
 
 * Sat Nov 06 2010 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.0-1
 - Updated to 1.0.0
