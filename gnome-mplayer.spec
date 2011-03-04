@@ -1,15 +1,15 @@
 %bcond_without minimal
 
 Name:           gnome-mplayer
-Version:        1.0.0
-Release:        2%{?dist}
+Version:        1.0.2
+Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
-Patch0:         gnome-mplayer-vdpau.patch
+Patch2:         gnome-mplayer-av.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -96,13 +96,13 @@ video files in the properties dialogue.
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
 pushd generic
-%patch0 -p0 -b .vdpau
+%patch2 -p2 -b .av
 popd
 %if %{with minimal}
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
 pushd minimal
-%patch0 -p0 -b .vdpau
+%patch2 -p2 -b .av
 popd
 %endif
 
@@ -222,13 +222,19 @@ rm -rf $RPM_BUILD_ROOT
 
 %files nautilus
 %defattr(-,root,root,-)
-%{_libdir}/nautilus/extensions-2.0/libgnome-mplayer-properties-page.so*
+%{_libdir}/nautilus/extensions-?.0/libgnome-mplayer-properties-page.so*
 
 
 %changelog
+* Fri Mar 04 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.2-1
+- Updated to 1.0.2
+- Dropped included patches
+
 * Sun Feb 20 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.0-2
 - Fixed intrusive error popup for vdpau (RF #1633)
 - Added a conditional for building without the minimal player
+- Added support for libnotify-0.7 from SVN
+- Fixed rawhide build failure
 
 * Sat Nov 06 2010 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.0-1
 - Updated to 1.0.0
