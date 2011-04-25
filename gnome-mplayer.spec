@@ -1,7 +1,7 @@
 %bcond_without minimal
 
 Name:           gnome-mplayer
-Version:        1.0.2
+Version:        1.0.3
 Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
@@ -14,7 +14,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  alsa-lib-devel
 BuildRequires:  dbus-glib-devel
 BuildRequires:  desktop-file-utils
+%if 0%{?fedora} < 15
 BuildRequires:  GConf2-devel
+%endif
 BuildRequires:  gettext
 BuildRequires:  gnome-power-manager
 BuildRequires:  gtk2-devel
@@ -46,9 +48,11 @@ Summary:        An MPlayer GUI, common files
 Group:          Applications/Multimedia
 Requires:       mplayer
 
+%if 0%{?fedora} < 15
 Requires(pre):  GConf2
 Requires(post): GConf2
 Requires(preun): GConf2
+%endif
 
 %description common
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
@@ -102,13 +106,20 @@ mv %{name}-%{version} minimal
 
 %build
 pushd generic
+%if 0%{?fedora} == 14
+%configure --with-gconf
+%else
 %configure
+%endif
 make %{?_smp_mflags}
 popd
 
 %if %{with minimal}
 pushd minimal
 %configure --program-suffix=-minimal --without-gio --without-libnotify \
+%if 0%{?fedora} == 14
+    --with-gconf \
+%endif
     --without-libgpod --without-libmusicbrainz3 --disable-nautilus
 make %{?_smp_mflags}
 popd
@@ -143,15 +154,9 @@ find $RPM_BUILD_ROOT -name *.la -exec rm -f {} \;
 
 
 %pre common
-if [ "$1" -gt 1 ]; then
-    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-    gconftool-2 --makefile-uninstall-rule \
-      %{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas >/dev/null || :
-    # If the schema file has ever been renamed::
-    #gconftool-2 --makefile-uninstall-rule \
-    #  %{_sysconfdir}/gconf/schemas/[OLDNAME].schemas > /dev/null || :
-fi
-
+%if 0%{?fedora} < 15
+%gconf_schema_prepare gnome-mplayer
+%endif
 
 %post
 update-desktop-database &> /dev/null || :
@@ -162,10 +167,9 @@ update-desktop-database &> /dev/null || :
 
 
 %post common
-export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-gconftool-2 --makefile-install-rule \
-  %{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas > /dev/null || :
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+%if 0%{?fedora} < 15
+%gconf_schema_upgrade gnome-mplayer
+%endif
 
 
 %postun common
@@ -173,18 +177,24 @@ if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
+%if 0%{?fedora} >= 15
+if [ $1 -eq 0 ] ; then
+    glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+fi
+%endif
 
 
 %posttrans common
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+%if 0%{?fedora} >= 15
+glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+%endif
 
 
 %preun common
-if [ "$1" -eq 0 ]; then
-    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-    gconftool-2 --makefile-uninstall-rule \
-      %{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas > /dev/null || :
-fi
+%if 0%{?fedora} < 15
+%gconf_schema_remove gnome-mplayer
+%endif
 
 
 %clean
@@ -201,7 +211,12 @@ rm -rf $RPM_BUILD_ROOT
 %files common -f %{name}.lang
 %defattr(-,root,root,-)
 %doc generic/COPYING generic/ChangeLog generic/README generic/DOCS/keyboard_shortcuts.txt generic/DOCS/tech/*
+%if 0%{?fedora} < 15
 %{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas
+%else
+%{_datadir}/glib-2.0/schemas/apps.gecko-mediaplayer.preferences.gschema.xml
+%{_datadir}/glib-2.0/schemas/apps.gnome-mplayer.preferences.*
+%endif
 %{_datadir}/icons/hicolor/*/apps/gnome-mplayer.*
 %{_mandir}/man1/gnome-mplayer.1*
 
@@ -219,6 +234,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Apr 25 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.3-1
+- Dropped included patches
+- Added logic to support gsettings/GConf
+- Updated GConf scriptlets to the latest spec
+
 * Fri Mar 04 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.2-1
 - Updated to 1.0.2
 - Dropped included patches
@@ -228,6 +248,7 @@ rm -rf $RPM_BUILD_ROOT
 - Fixed intrusive error popup for vdpau (RF #1633)
 - Added a conditional for building without the minimal player
 - Added support for libnotify-0.7 from SVN
+- Fixed rawhide build failure
 
 * Sat Nov 06 2010 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.0-1
 - Updated to 1.0.0
