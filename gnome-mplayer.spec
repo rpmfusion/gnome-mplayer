@@ -1,7 +1,7 @@
 %bcond_without minimal
 
 Name:           gnome-mplayer
-Version:        1.0.3
+Version:        1.0.4
 Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
@@ -19,7 +19,11 @@ BuildRequires:  GConf2-devel
 %endif
 BuildRequires:  gettext
 BuildRequires:  gnome-power-manager
+%if 0%{?fedora} >= 15
+BuildRequires:  gtk3-devel
+%else
 BuildRequires:  gtk2-devel
+%endif
 BuildRequires:  libcurl-devel
 BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
@@ -106,10 +110,14 @@ mv %{name}-%{version} minimal
 
 %build
 pushd generic
+%if 0%{?fedora} >= 15
+%configure --enable-gtk3
+%else
 %if 0%{?fedora} == 14
 %configure --with-gconf
 %else
 %configure
+%endif
 %endif
 make %{?_smp_mflags}
 popd
@@ -117,8 +125,12 @@ popd
 %if %{with minimal}
 pushd minimal
 %configure --program-suffix=-minimal --without-gio --without-libnotify \
+%if 0%{?fedora} >= 15
+    --enable-gtk3 \
+%else
 %if 0%{?fedora} == 14
     --with-gconf \
+%endif
 %endif
     --without-libgpod --without-libmusicbrainz3 --disable-nautilus
 make %{?_smp_mflags}
@@ -130,13 +142,17 @@ popd
 rm -rf $RPM_BUILD_ROOT
 
 pushd generic
+%if 0%{?fedora} < 15
 export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
+%endif
 make install DESTDIR=$RPM_BUILD_ROOT
 popd
 
 %if %{with minimal}
 pushd minimal
+%if 0%{?fedora} < 15
 export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
+%endif
 make install DESTDIR=$RPM_BUILD_ROOT
 popd
 %endif
@@ -234,6 +250,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jul 01 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.4-1
+- Updated to 1.0.4
+- Enabled gtk3 on Fedora 15 and above
+
 * Mon Apr 25 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.3-1
 - Dropped included patches
 - Added logic to support gsettings/GConf
