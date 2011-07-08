@@ -103,11 +103,15 @@ video files in the properties dialogue.
 %setup -qcT
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
-%patch0 -p0 -d generic -b .applefix
+pushd generic
+%patch0 -p0 -b .applefix
+popd
 %if %{with minimal}
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
-%patch0 -p0 -d minimal -b .applefix
+pushd minimal
+%patch0 -p0 -b .applefix
+popd
 %endif
 
 
