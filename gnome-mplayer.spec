@@ -2,13 +2,14 @@
 
 Name:           gnome-mplayer
 Version:        1.0.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
+Patch0:         %{name}-applefix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
@@ -102,9 +103,11 @@ video files in the properties dialogue.
 %setup -qcT
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
+%patch0 -p0 -d generic -b .applefix
 %if %{with minimal}
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
+%patch0 -p0 -d minimal -b .applefix
 %endif
 
 
@@ -250,6 +253,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jul 08 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.4-2
+- Fixed apple.com regression using a patch from SVN
+
 * Fri Jul 01 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.4-1
 - Updated to 1.0.4
 - Enabled gtk3 on Fedora 15 and above
