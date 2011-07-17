@@ -1,8 +1,14 @@
 %bcond_without minimal
 
+%if 0%{?fedora} < 15
+%bcond_without gconf
+%else
+%bcond_with gconf
+%endif
+
 Name:           gnome-mplayer
 Version:        1.0.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 Group:          Applications/Multimedia
@@ -15,7 +21,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  alsa-lib-devel
 BuildRequires:  dbus-glib-devel
 BuildRequires:  desktop-file-utils
-%if 0%{?fedora} < 15
+%if %{with gconf}
 BuildRequires:  GConf2-devel
 %endif
 BuildRequires:  gettext
@@ -53,7 +59,7 @@ Summary:        An MPlayer GUI, common files
 Group:          Applications/Multimedia
 Requires:       mplayer
 
-%if 0%{?fedora} < 15
+%if %{with gconf}
 Requires(pre):  GConf2
 Requires(post): GConf2
 Requires(preun): GConf2
@@ -118,13 +124,9 @@ popd
 %build
 pushd generic
 %if 0%{?fedora} >= 15
-%configure --enable-gtk3
+%configure --enable-gtk3 %{?with_gconf:--with-gconf}
 %else
-%if 0%{?fedora} == 14
-%configure --with-gconf
-%else
-%configure
-%endif
+%configure %{?with_gconf:--with-gconf}
 %endif
 make %{?_smp_mflags}
 popd
@@ -134,12 +136,9 @@ pushd minimal
 %configure --program-suffix=-minimal --without-gio --without-libnotify \
 %if 0%{?fedora} >= 15
     --enable-gtk3 \
-%else
-%if 0%{?fedora} == 14
-    --with-gconf \
 %endif
-%endif
-    --without-libgpod --without-libmusicbrainz3 --disable-nautilus
+    --without-libgpod --without-libmusicbrainz3 --disable-nautilus \
+    %{?with_gconf:--with-gconf}
 make %{?_smp_mflags}
 popd
 %endif
@@ -149,7 +148,7 @@ popd
 rm -rf $RPM_BUILD_ROOT
 
 pushd generic
-%if 0%{?fedora} < 15
+%if %{with gconf}
 export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 %endif
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -157,7 +156,7 @@ popd
 
 %if %{with minimal}
 pushd minimal
-%if 0%{?fedora} < 15
+%if %{with gconf}
 export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 %endif
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -176,8 +175,8 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}/gnome-mplayer
 find $RPM_BUILD_ROOT -name *.la -exec rm -f {} \;
 
 
+%if %{with gconf}
 %pre common
-%if 0%{?fedora} < 15
 %gconf_schema_prepare gnome-mplayer
 %endif
 
@@ -189,8 +188,8 @@ update-desktop-database &> /dev/null || :
 update-desktop-database &> /dev/null || :
 
 
+%if %{with gconf}
 %post common
-%if 0%{?fedora} < 15
 %gconf_schema_upgrade gnome-mplayer
 %endif
 
@@ -200,7 +199,7 @@ if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
-%if 0%{?fedora} >= 15
+%if ! %{with gconf}
 if [ $1 -eq 0 ] ; then
     glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 fi
@@ -209,13 +208,13 @@ fi
 
 %posttrans common
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-%if 0%{?fedora} >= 15
+%if ! %{with gconf}
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %endif
 
 
+%if %{with gconf}
 %preun common
-%if 0%{?fedora} < 15
 %gconf_schema_remove gnome-mplayer
 %endif
 
@@ -234,7 +233,7 @@ rm -rf $RPM_BUILD_ROOT
 %files common -f %{name}.lang
 %defattr(-,root,root,-)
 %doc generic/COPYING generic/ChangeLog generic/README generic/DOCS/keyboard_shortcuts.txt generic/DOCS/tech/*
-%if 0%{?fedora} < 15
+%if %{with gconf}
 %{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas
 %else
 %{_datadir}/glib-2.0/schemas/apps.gecko-mediaplayer.preferences.gschema.xml
@@ -257,6 +256,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jul 16 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.4-3
+- Added an easy way to pick between GSettings and GConf2
+- Rearranged the conditionals to avoid leaving empty %%pre et al.
+
 * Fri Jul 08 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.4-2
 - Fixed apple.com regression using a patch from SVN
 
