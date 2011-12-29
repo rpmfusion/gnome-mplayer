@@ -1,36 +1,20 @@
 %bcond_without minimal
 
-%if 0%{?fedora} < 15
-%bcond_without gconf
-%else
-%bcond_with gconf
-%endif
-
 Name:           gnome-mplayer
-Version:        1.0.4
-Release:        3%{?dist}
+Version:        1.0.5
+Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
-Group:          Applications/Multimedia
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
-Patch0:         %{name}-applefix.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  alsa-lib-devel
 BuildRequires:  dbus-glib-devel
 BuildRequires:  desktop-file-utils
-%if %{with gconf}
-BuildRequires:  GConf2-devel
-%endif
 BuildRequires:  gettext
-BuildRequires:  gnome-power-manager
-%if 0%{?fedora} >= 15
+BuildRequires:  gmtk-devel == %{version}.0
 BuildRequires:  gtk3-devel
-%else
-BuildRequires:  gtk2-devel
-%endif
 BuildRequires:  libcurl-devel
 BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
@@ -40,11 +24,11 @@ BuildRequires:  nautilus-devel
 BuildRequires:  pulseaudio-libs-devel
 
 Requires:       control-center-filesystem
-Requires:       gvfs-fuse
-Requires:       mencoder
-Requires:       %{name}-common = %{version}-%{release}
+Requires:       gvfs-fuse%{?_isa}
+Requires:       mencoder%{?_isa}
+Requires:       %{name}-common%{?_isa} = %{version}-%{release}
 
-Provides:       %{name}-binary = %{version}-%{release}
+Provides:       %{name}-binary%{?_isa} = %{version}-%{release}
 
 %description
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
@@ -56,14 +40,6 @@ This package provides a full-featured binary.
 
 %package common
 Summary:        An MPlayer GUI, common files
-Group:          Applications/Multimedia
-Requires:       mplayer
-
-%if %{with gconf}
-Requires(pre):  GConf2
-Requires(post): GConf2
-Requires(preun): GConf2
-%endif
 
 %description common
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
@@ -76,9 +52,8 @@ This package provides the common files.
 %if %{with minimal}
 %package minimal
 Summary:        An MPlayer GUI, a minimal version
-Group:          Applications/Multimedia
-Requires:       %{name}-common = %{version}-%{release}
-Provides:       %{name}-binary = %{version}-%{release}
+Requires:       %{name}-common%{?_isa} = %{version}-%{release}
+Provides:       %{name}-binary%{?_isa} = %{version}-%{release}
 
 %description minimal
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
@@ -92,9 +67,8 @@ who want browser plugin functionality only.
 
 %package nautilus
 Summary:        An MPlayer GUI, nautilus extension
-Group:          Applications/Multimedia
-Requires:       %{name} = %{version}-%{release}
-Requires:       nautilus-extensions
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       nautilus-extensions%{?_isa}
 
 %description nautilus
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
@@ -109,36 +83,22 @@ video files in the properties dialogue.
 %setup -qcT
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} generic
-pushd generic
-%patch0 -p0 -b .applefix
-popd
 %if %{with minimal}
 tar -xzf %{SOURCE0}
 mv %{name}-%{version} minimal
-pushd minimal
-%patch0 -p0 -b .applefix
-popd
 %endif
 
 
 %build
 pushd generic
-%if 0%{?fedora} >= 15
-%configure --enable-gtk3 %{?with_gconf:--with-gconf}
-%else
-%configure %{?with_gconf:--with-gconf}
-%endif
+%configure
 make %{?_smp_mflags}
 popd
 
 %if %{with minimal}
 pushd minimal
 %configure --program-suffix=-minimal --without-gio --without-libnotify \
-%if 0%{?fedora} >= 15
-    --enable-gtk3 \
-%endif
-    --without-libgpod --without-libmusicbrainz3 --disable-nautilus \
-    %{?with_gconf:--with-gconf}
+    --without-libgpod --without-libmusicbrainz3 --disable-nautilus
 make %{?_smp_mflags}
 popd
 %endif
@@ -148,17 +108,11 @@ popd
 rm -rf $RPM_BUILD_ROOT
 
 pushd generic
-%if %{with gconf}
-export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
-%endif
 make install DESTDIR=$RPM_BUILD_ROOT
 popd
 
 %if %{with minimal}
 pushd minimal
-%if %{with gconf}
-export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
-%endif
 make install DESTDIR=$RPM_BUILD_ROOT
 popd
 %endif
@@ -175,11 +129,6 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}/gnome-mplayer
 find $RPM_BUILD_ROOT -name *.la -exec rm -f {} \;
 
 
-%if %{with gconf}
-%pre common
-%gconf_schema_prepare gnome-mplayer
-%endif
-
 %post
 update-desktop-database &> /dev/null || :
 
@@ -188,74 +137,54 @@ update-desktop-database &> /dev/null || :
 update-desktop-database &> /dev/null || :
 
 
-%if %{with gconf}
-%post common
-%gconf_schema_upgrade gnome-mplayer
-%endif
-
-
 %postun common
 if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
-%if ! %{with gconf}
 if [ $1 -eq 0 ] ; then
     glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 fi
-%endif
 
 
 %posttrans common
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-%if ! %{with gconf}
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
-%endif
-
-
-%if %{with gconf}
-%preun common
-%gconf_schema_remove gnome-mplayer
-%endif
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root,-)
 %{_bindir}/gnome-mplayer
 %{_datadir}/applications/rpmfusion-gnome-mplayer.desktop
 %{_datadir}/gnome-control-center/default-apps/gnome-mplayer.xml
 
 
 %files common -f %{name}.lang
-%defattr(-,root,root,-)
 %doc generic/COPYING generic/ChangeLog generic/README generic/DOCS/keyboard_shortcuts.txt generic/DOCS/tech/*
-%if %{with gconf}
-%{_sysconfdir}/gconf/schemas/gnome-mplayer.schemas
-%else
 %{_datadir}/glib-2.0/schemas/apps.gecko-mediaplayer.preferences.gschema.xml
 %{_datadir}/glib-2.0/schemas/apps.gnome-mplayer.preferences.*
-%endif
 %{_datadir}/icons/hicolor/*/apps/gnome-mplayer.*
 %{_mandir}/man1/gnome-mplayer.1*
 
 
 %if %{with minimal}
 %files minimal
-%defattr(-,root,root,-)
 %{_bindir}/gnome-mplayer-minimal
 %endif
 
 
 %files nautilus
-%defattr(-,root,root,-)
 %{_libdir}/nautilus/extensions-?.0/libgnome-mplayer-properties-page.so*
 
 
 %changelog
+* Thu Dec 29 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.5-1
+- Updated to 1.0.5
+- Dropped the included apple.com fix
+- Refactored to accomodate the gmtk split
+- Dropped obsolete Group, Buildroot, %%clean and %%defattr
+- Removed GConf logic since F-14 is EOL
+- Added %%{?_isa} to explicit dependencies
+
 * Sat Jul 16 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.4-3
 - Added an easy way to pick between GSettings and GConf2
 - Rearranged the conditionals to avoid leaving empty %%pre et al.
