@@ -1,7 +1,7 @@
 %bcond_without minimal
 
 Name:           gnome-mplayer
-Version:        1.0.5
+Version:        1.0.6
 Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
@@ -13,7 +13,7 @@ BuildRequires:  alsa-lib-devel
 BuildRequires:  dbus-glib-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
-BuildRequires:  gmtk-devel == %{version}.0
+BuildRequires:  gmtk-devel == %{version}
 BuildRequires:  gtk3-devel
 BuildRequires:  libcurl-devel
 BuildRequires:  libgpod-devel
@@ -68,7 +68,6 @@ who want browser plugin functionality only.
 %package nautilus
 Summary:        An MPlayer GUI, nautilus extension
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       nautilus-extensions%{?_isa}
 
 %description nautilus
 GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
@@ -177,6 +176,10 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Fri Apr 06 2012 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.6-1
+- Updated to 1.0.6
+- Dropped explicit nautilus-extensions dependency
+
 * Thu Dec 29 2011 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.5-1
 - Updated to 1.0.5
 - Dropped the included apple.com fix
