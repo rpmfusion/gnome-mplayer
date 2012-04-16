@@ -2,7 +2,7 @@
 
 Name:           gnome-mplayer
 Version:        1.0.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 License:        GPLv2+
@@ -176,6 +176,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Mon Apr 16 2012 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.6-2
+- Rebuilt for new libimobiledevice and usbmuxd (RPM Fusion #2280)
+
 * Fri Apr 06 2012 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.6-1
 - Updated to 1.0.6
 - Dropped explicit nautilus-extensions dependency
