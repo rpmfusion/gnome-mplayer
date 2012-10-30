@@ -1,7 +1,7 @@
 %bcond_without minimal
 
 Name:           gnome-mplayer
-Version:        1.0.6
+Version:        1.0.7
 Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
@@ -116,9 +116,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 popd
 %endif
 
-desktop-file-install --vendor=rpmfusion \
-       --delete-original --dir $RPM_BUILD_ROOT%{_datadir}/applications \
-       $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
+desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
+
 %find_lang %{name}
 
 #remove intrusive docs
@@ -153,7 +152,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 %files
 %{_bindir}/gnome-mplayer
-%{_datadir}/applications/rpmfusion-gnome-mplayer.desktop
+%{_datadir}/applications/gnome-mplayer.desktop
 %{_datadir}/gnome-control-center/default-apps/gnome-mplayer.xml
 
 
@@ -176,6 +175,13 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Tue Oct 30 2012 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.7-1
+- Updated to 1.0.7
+- Dropped --vendor from .desktop file installation (RPM Fusion #2445)
+
+* Mon Apr 16 2012 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.6-2
+- Rebuilt for new libimobiledevice and usbmuxd (RPM Fusion #2280)
+
 * Fri Apr 06 2012 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.6-1
 - Updated to 1.0.6
 - Dropped explicit nautilus-extensions dependency
