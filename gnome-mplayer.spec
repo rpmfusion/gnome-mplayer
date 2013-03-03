@@ -1,7 +1,7 @@
 %bcond_without minimal
 
 Name:           gnome-mplayer
-Version:        1.0.7
+Version:        1.0.8
 Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
@@ -16,6 +16,7 @@ BuildRequires:  gettext
 BuildRequires:  gmtk-devel == %{version}
 BuildRequires:  gtk3-devel
 BuildRequires:  libcurl-devel
+BuildRequires:  libgda-devel
 BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
@@ -25,6 +26,7 @@ BuildRequires:  pulseaudio-libs-devel
 
 Requires:       control-center-filesystem
 Requires:       gvfs-fuse%{?_isa}
+Requires:       libgda-sqlite
 Requires:       mencoder%{?_isa}
 Requires:       %{name}-common%{?_isa} = %{version}-%{release}
 
@@ -91,14 +93,15 @@ mv %{name}-%{version} minimal
 %build
 pushd generic
 %configure
-make %{?_smp_mflags}
+make V=1 %{?_smp_mflags}
 popd
 
 %if %{with minimal}
 pushd minimal
 %configure --program-suffix=-minimal --without-gio --without-libnotify \
-    --without-libgpod --without-libmusicbrainz3 --disable-nautilus
-make %{?_smp_mflags}
+    --without-libgpod --without-libmusicbrainz3 --without-libgda \
+    --disable-nautilus
+make V=1 %{?_smp_mflags}
 popd
 %endif
 
@@ -107,12 +110,12 @@ popd
 rm -rf $RPM_BUILD_ROOT
 
 pushd generic
-make install DESTDIR=$RPM_BUILD_ROOT
+make V=1 install DESTDIR=$RPM_BUILD_ROOT
 popd
 
 %if %{with minimal}
 pushd minimal
-make install DESTDIR=$RPM_BUILD_ROOT
+make V=1 install DESTDIR=$RPM_BUILD_ROOT
 popd
 %endif
 
@@ -175,6 +178,12 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Sun Mar 03 2013 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.8-1
+- Updated to 1.0.8
+- Added libgda-devel to BuildRequires
+- Added libgda-sqlite to Requires
+- Added V=1 to make invocations
+
 * Tue Oct 30 2012 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.7-1
 - Updated to 1.0.7
 - Dropped --vendor from .desktop file installation (RPM Fusion #2445)
