@@ -2,7 +2,7 @@
 
 Name:           gnome-mplayer
 Version:        1.0.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 License:        GPLv2+
@@ -178,6 +178,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Mon May 27 2013 Nicolas Chauvet <kwizart@gmail.com> - 1.0.8-2
+- Rebuilt for x264/FFmpeg
+
 * Sun Mar 03 2013 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.8-1
 - Updated to 1.0.8
 - Added libgda-devel to BuildRequires
