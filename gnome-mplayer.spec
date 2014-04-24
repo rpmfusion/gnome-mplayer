@@ -1,8 +1,8 @@
 %bcond_without minimal
 
 Name:           gnome-mplayer
-Version:        1.0.8
-Release:        2%{?dist}
+Version:        1.0.9
+Release:        1%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 License:        GPLv2+
@@ -22,6 +22,7 @@ BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
 BuildRequires:  libXScrnSaver-devel
 BuildRequires:  nautilus-devel
+BuildRequires:  nemo-devel
 BuildRequires:  pulseaudio-libs-devel
 
 Requires:       control-center-filesystem
@@ -80,6 +81,19 @@ This package provides a nautilus extension, which shows properties of audio and
 video files in the properties dialogue.
 
 
+%package nemo
+Summary:        An MPlayer GUI, nemo extension
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description nemo
+GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
+player and provide a simple and clean interface to MPlayer. GNOME MPlayer has
+a rich API that is exposed via DBus. Using DBus you can control a single or
+multiple instances of GNOME MPlayer from a single command.
+This package provides a nemo extension, which shows properties of audio and
+video files in the properties dialogue.
+
+
 %prep
 %setup -qcT
 tar -xzf %{SOURCE0}
@@ -100,7 +114,7 @@ popd
 pushd minimal
 %configure --program-suffix=-minimal --without-gio --without-libnotify \
     --without-libgpod --without-libmusicbrainz3 --without-libgda \
-    --disable-nautilus
+    --disable-nautilus --disable-nemo
 make V=1 %{?_smp_mflags}
 popd
 %endif
@@ -177,7 +191,15 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_libdir}/nautilus/extensions-?.0/libgnome-mplayer-properties-page.so*
 
 
+%files nemo
+%{_libdir}/nemo/extensions-?.0/libgnome-mplayer-nemo-properties-page.so*
+
+
 %changelog
+* Thu Apr 24 2014 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.9-1
+- Updated to 1.0.9
+- Added -nemo subpackage
+
 * Mon May 27 2013 Nicolas Chauvet <kwizart@gmail.com> - 1.0.8-2
 - Rebuilt for x264/FFmpeg
 
@@ -258,7 +280,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 * Wed Jul 01 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.6-2
 - Fixed screensaver inhibition
 
-* Sun Jun 05 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.6-1
+* Fri Jun 05 2009 Julian Sikorski <belegdol[at]gmail[dot]com> - 0.9.6-1
 - Updated to 0.9.6
 - Dropped upstreamed patches
 - Enabled flat volumes by default in Fedora 11 and above
