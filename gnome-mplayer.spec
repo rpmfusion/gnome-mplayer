@@ -2,7 +2,7 @@
 
 Name:           gnome-mplayer
 Version:        1.0.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 License:        GPLv2+
@@ -196,6 +196,9 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 
 
 %changelog
+* Mon Sep 01 2014 Sérgio Basto <sergio@serjux.com> - 1.0.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Thu Apr 24 2014 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.9-1
 - Updated to 1.0.9
 - Added -nemo subpackage
