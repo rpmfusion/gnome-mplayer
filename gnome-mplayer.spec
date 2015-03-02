@@ -2,12 +2,15 @@
 
 Name:           gnome-mplayer
 Version:        1.0.9
-Release:        1%{?dist}
+Release:        3.20150203svn2476%{?dist}
 Summary:        An MPlayer GUI, a full-featured binary
 
 License:        GPLv2+
 URL:            http://kdekorte.googlepages.com/gnomemplayer
 Source0:        http://gnome-mplayer.googlecode.com/files/%{name}-%{version}.tar.gz
+
+Patch0:          gnome-mplayer_add-caja.patch
+Patch1:          gnome-mplayer_add-mate-to-dbus-screensaver-interface.patch
 
 BuildRequires:  alsa-lib-devel
 BuildRequires:  dbus-glib-devel
@@ -21,6 +24,7 @@ BuildRequires:  libgpod-devel
 BuildRequires:  libmusicbrainz3-devel
 BuildRequires:  libnotify-devel
 BuildRequires:  libXScrnSaver-devel
+BuildRequires:  caja-devel
 BuildRequires:  nautilus-devel
 BuildRequires:  nemo-devel
 BuildRequires:  pulseaudio-libs-devel
@@ -94,12 +98,36 @@ This package provides a nemo extension, which shows properties of audio and
 video files in the properties dialogue.
 
 
+%package caja
+Summary:        An MPlayer GUI, caja extension
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description caja
+GNOME MPlayer is a simple GUI for MPlayer. It is intended to be a nice tight
+player and provide a simple and clean interface to MPlayer. GNOME MPlayer has
+a rich API that is exposed via DBus. Using DBus you can control a single or
+multiple instances of GNOME MPlayer from a single command.
+This package provides a caja extension, which shows properties of audio and
+video files in the properties dialogue.
+
+
 %prep
 %setup -qcT
 tar -xzf %{SOURCE0}
+cd %{name}-%{version}
+touch -r configure.in configure.in.stamp
+touch -r src/Makefile.am src/Makefile.am.stamp
+%patch0 -p0 -b .caja
+touch -r configure.in.stamp configure.in
+touch -r src/Makefile.am.stamp src/Makefile.am
+%patch1 -p0 -b .dbus
+cd ..
 mv %{name}-%{version} generic
 %if %{with minimal}
 tar -xzf %{SOURCE0}
+cd %{name}-%{version}
+%patch1 -p0 -b .dbus
+cd ..
 mv %{name}-%{version} minimal
 %endif
 
@@ -114,7 +142,7 @@ popd
 pushd minimal
 %configure --program-suffix=-minimal --without-gio --without-libnotify \
     --without-libgpod --without-libmusicbrainz3 --without-libgda \
-    --disable-nautilus --disable-nemo
+    --disable-nautilus --disable-nemo --disable-caja
 make V=1 %{?_smp_mflags}
 popd
 %endif
@@ -195,7 +223,17 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_libdir}/nemo/extensions-?.0/libgnome-mplayer-nemo-properties-page.so*
 
 
+%files caja
+%{_libdir}/caja/extensions-2.0/libgnome-mplayer-caja-properties-page.so*
+
+
 %changelog
+* Sun Mar 01 2015 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.9-3.20150203svn2476
+- Updated to latest SVN based on work done by Wolfgang Ulbrich (RPM Fusion #3537)
+
+* Mon Sep 01 2014 Sérgio Basto <sergio@serjux.com> - 1.0.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Thu Apr 24 2014 Julian Sikorski <belegdol@fedoraproject.org> - 1.0.9-1
 - Updated to 1.0.9
 - Added -nemo subpackage
